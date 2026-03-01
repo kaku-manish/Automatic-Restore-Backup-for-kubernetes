@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vaultguard-demo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads-pvc
+  namespace: vaultguard-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  # Leaves storageClassName empty to use the default (standard in minikube/kind)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-uploader
+  namespace: vaultguard-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: file-uploader
+  template:
+    metadata:
+      labels:
+        app: file-uploader
+    spec:
+      containers:
+      - name: file-server
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: uploads-volume
+          mountPath: /data/uploads
+      volumes:
+      - name: uploads-volume
+        persistentVolumeClaim:
+          claimName: uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-uploader-svc
+  namespace: vaultguard-demo
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: file-uploader
+  type: ClusterIP

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultguard-uploader-api
+  namespace: vaultguard-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultguard-uploader-api
+  template:
+    metadata:
+      labels:
+        app: vaultguard-uploader-api
+    spec:
+      containers:
+      - name: api-server
+        image: vaultguard/uploader-api:latest  # The image built from the Dockerfile
+        imagePullPolicy: IfNotPresent  # Crucial for using local Minikube/Kind docker images
+        ports:
+        - containerPort: 3000
+        env:
+        - name: UPLOAD_DIR
+          value: /data/uploads
+        # 1. We tell the container to mount the volume to /data/uploads
+        volumeMounts:
+        - name: uploads-volume
+          mountPath: /data/uploads
+      
+      # 2. We define the volume to map directly to our specific PVC
+      volumes:
+      - name: uploads-volume
+        persistentVolumeClaim:
+          claimName: uploads-pvc  # The existing PVC mapped from vaultguard-demo-app.yaml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vaultguard-uploader-svc
+  namespace: vaultguard-demo
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: vaultguard-uploader-api
+  type: ClusterIP
