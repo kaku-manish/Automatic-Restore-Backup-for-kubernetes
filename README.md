@@ -8,32 +8,39 @@ A production-grade Kubernetes backup and disaster recovery platform with automat
 ## 📁 Project Structure
 
 ```
-├── frontend/          # React + Vite UI (Tailwind, Radix UI, Recharts)
+Automatic-Restore-Backup-for-kubernetes/
+│
+├── 📁 frontend/                   ← React + Vite UI
 │   ├── src/
-│   │   ├── api/       # API client (fetch wrapper for backend)
-│   │   ├── pages/     # Dashboard, Backups, Schedules, Restore, Clusters, Monitoring, DR, Upload
-│   │   ├── components/# Shared UI components
-│   │   └── types/     # TypeScript types
-│   ├── package.json   # Frontend dependencies
-│   └── vite.config.ts
+│   │   ├── api/       (fetch wrapper calling backend)
+│   │   ├── pages/     (Dashboard, Backups, Schedules, Restore,
+│   │   │               Clusters, Monitoring, DR, UploadDemo)
+│   │   └── components/
+│   ├── package.json   (React, Radix UI, TanStack Query, Recharts)
+│   ├── vite.config.ts
+│   └── index.html
 │
-├── backend/           # Node.js + Express API Server
-│   ├── server.js      # Main API server (port 3001) — all routes + file upload
-│   ├── backupService.js   # Backup orchestration router
-│   ├── backupWatcher.js   # Background Velero status poller
-│   ├── veleroClient.js    # Velero CLI wrapper
-│   ├── restoreService.js  # Manual + automated DR restore logic
-│   ├── metricsEngine.js   # Computes dashboard/monitoring metrics
-│   ├── backend-uploader.js # Legacy standalone uploader (superseded by server.js)
-│   ├── Dockerfile     # Docker image for backend API
-│   └── package.json   # Backend dependencies (express, cors, multer)
+├── 📁 backend/                    ← Node.js + Express API (port 3001)
+│   ├── server.js          (All routes + file upload endpoint)
+│   ├── backupService.js   (Backup orchestration router)
+│   ├── backupWatcher.js   (Background Velero status poller)
+│   ├── veleroClient.js    (Velero CLI wrapper)
+│   ├── restoreService.js  (Manual + automated DR restore logic)
+│   ├── metricsEngine.js   (Dashboard/monitoring metrics engine)
+│   ├── Dockerfile         (Container image for backend)
+│   └── package.json       (express, cors, multer only)
 │
-├── uploads/           # CSV/Excel files saved by the file upload API (gitignored)
-├── vaultguard-demo-app.yaml       # K8s Namespace + PVC + Deployment + Service
-├── vaultguard-api-deployment.yaml # K8s Deployment for backend pod
-├── PROJECT_DOCUMENTATION.md
-├── VAULTGUARD_ARCHITECTURE.md
-└── MIGRATION_PLAN.md
+├── 📁 k8s/                        ← Kubernetes manifests
+│   ├── vaultguard-demo-app.yaml   (Namespace + PVC + Deployment + Service)
+│   └── vaultguard-api-deployment.yaml (Backend pod with PVC mount)
+│
+├── 📁 docs/                       ← Project documentation
+│   ├── PROJECT_DOCUMENTATION.md
+│   ├── VAULTGUARD_ARCHITECTURE.md
+│   └── MIGRATION_PLAN.md
+│
+├── 📁 uploads/                    ← Gitignored (user CSV/Excel files)
+└── README.md
 ```
 
 ---
