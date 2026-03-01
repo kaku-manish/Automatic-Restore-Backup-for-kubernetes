@@ -10,36 +10,38 @@ A production-grade Kubernetes backup and disaster recovery platform with automat
 ```
 Automatic-Restore-Backup-for-kubernetes/
 │
-├── 📁 frontend/                   ← React + Vite UI
+├── 📁 frontend/                        ← React + Vite UI
 │   ├── src/
-│   │   ├── api/       (fetch wrapper calling backend)
-│   │   ├── pages/     (Dashboard, Backups, Schedules, Restore,
-│   │   │               Clusters, Monitoring, DR, UploadDemo)
-│   │   └── components/
-│   ├── package.json   (React, Radix UI, TanStack Query, Recharts)
+│   │   ├── api/         (fetch wrapper calling backend API)
+│   │   ├── pages/       (Dashboard, Backups, Schedules, Restore,
+│   │   │                 Clusters, Monitoring, DR, UploadDemo)
+│   │   └── components/  (Shared UI components)
+│   ├── package.json     (React, Radix UI, TanStack Query, Recharts)
 │   ├── vite.config.ts
 │   └── index.html
 │
-├── 📁 backend/                    ← Node.js + Express API (port 3001)
-│   ├── server.js          (All routes + file upload endpoint)
-│   ├── backupService.js   (Backup orchestration router)
-│   ├── backupWatcher.js   (Background Velero status poller)
-│   ├── veleroClient.js    (Velero CLI wrapper)
-│   ├── restoreService.js  (Manual + automated DR restore logic)
-│   ├── metricsEngine.js   (Dashboard/monitoring metrics engine)
-│   ├── Dockerfile         (Container image for backend)
-│   └── package.json       (express, cors, multer only)
+├── 📁 backend/                         ← Node.js + Express API (port 3001)
+│   ├── server.js            (All API routes + file upload)
+│   ├── backupService.js     (Backup orchestration router)
+│   ├── backupWatcher.js     (Background Velero status poller)
+│   ├── veleroClient.js      (Velero CLI wrapper)
+│   ├── restoreService.js    (Manual + automated DR restore logic)
+│   ├── metricsEngine.js     (Dashboard/monitoring metrics engine)
+│   ├── Dockerfile           (Container image for backend)
+│   ├── package.json         (express, cors, multer only)
+│   │
+│   ├── 📁 k8s/              ← Kubernetes manifests
+│   │   ├── vaultguard-demo-app.yaml
+│   │   └── vaultguard-api-deployment.yaml
+│   │
+│   ├── 📁 docs/             ← Project documentation
+│   │   ├── PROJECT_DOCUMENTATION.md
+│   │   ├── VAULTGUARD_ARCHITECTURE.md
+│   │   └── MIGRATION_PLAN.md
+│   │
+│   └── 📁 uploads/          ← Gitignored (user CSV/Excel files live here)
 │
-├── 📁 k8s/                        ← Kubernetes manifests
-│   ├── vaultguard-demo-app.yaml   (Namespace + PVC + Deployment + Service)
-│   └── vaultguard-api-deployment.yaml (Backend pod with PVC mount)
-│
-├── 📁 docs/                       ← Project documentation
-│   ├── PROJECT_DOCUMENTATION.md
-│   ├── VAULTGUARD_ARCHITECTURE.md
-│   └── MIGRATION_PLAN.md
-│
-├── 📁 uploads/                    ← Gitignored (user CSV/Excel files)
+├── .gitignore
 └── README.md
 ```
 

@@ -35,6 +35,7 @@ pnpm-debug.log*
 # Never commit real user data
 # ===========================
 uploads/
+backend/uploads/
 
 # ===========================
 # Editor & OS files
