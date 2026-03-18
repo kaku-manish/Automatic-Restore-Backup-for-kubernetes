@@ -1,4 +1,7 @@
-export const API_BASE = 'http://localhost:3001/api';
+// Uses VITE_API_URL from environment variables.
+// - For local dev: set in .env.local (http://localhost:3001/api)
+// - For production: set VITE_API_URL in Vercel dashboard → Environment Variables
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
 export const fetchMetrics = async () => {
     const res = await fetch(`${API_BASE}/metrics`);
