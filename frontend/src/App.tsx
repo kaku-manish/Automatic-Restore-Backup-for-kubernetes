@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
+
+// Pages
 import Dashboard from "./pages/Dashboard";
 import Backups from "./pages/Backups";
 import Schedules from "./pages/Schedules";
@@ -16,6 +18,10 @@ import DisasterRecovery from "./pages/DisasterRecovery";
 import UploadDemo from "./pages/UploadDemo";
 import NotFound from "./pages/NotFound";
 
+// Auth Pages
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,21 +30,33 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppLayout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/backups" element={<Backups />} />
-            <Route path="/schedules" element={<Schedules />} />
-            <Route path="/restore" element={<Restore />} />
-            <Route path="/clusters" element={<Clusters />} />
-            <Route path="/architecture" element={<Architecture />} />
-            <Route path="/monitoring" element={<Monitoring />} />
-            <Route path="/disaster-recovery" element={<DisasterRecovery />} />
-            <Route path="/upload-demo" element={<UploadDemo />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AppLayout>
+        <Routes>
+          {/* Public Auth Routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+          {/* App Routes with Layout */}
+          <Route
+            path="/*"
+            element={
+              <AppLayout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/backups" element={<Backups />} />
+                  <Route path="/schedules" element={<Schedules />} />
+                  <Route path="/restore" element={<Restore />} />
+                  <Route path="/clusters" element={<Clusters />} />
+                  <Route path="/architecture" element={<Architecture />} />
+                  <Route path="/monitoring" element={<Monitoring />} />
+                  <Route path="/disaster-recovery" element={<DisasterRecovery />} />
+                  <Route path="/upload-demo" element={<UploadDemo />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AppLayout>
+            }
+          />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
