@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "@/components/AppLayout";
 
 // Pages
@@ -24,6 +24,17 @@ import Signup from "./pages/Signup";
 
 const queryClient = new QueryClient();
 
+// Basic Route Guard
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -39,21 +50,23 @@ const App = () => (
           <Route
             path="/*"
             element={
-              <AppLayout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/backups" element={<Backups />} />
-                  <Route path="/schedules" element={<Schedules />} />
-                  <Route path="/restore" element={<Restore />} />
-                  <Route path="/clusters" element={<Clusters />} />
-                  <Route path="/architecture" element={<Architecture />} />
-                  <Route path="/monitoring" element={<Monitoring />} />
-                  <Route path="/disaster-recovery" element={<DisasterRecovery />} />
-                  <Route path="/upload-demo" element={<UploadDemo />} />
-                  <Route path="/settings" element={<SettingsPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </AppLayout>
+              <ProtectedRoute>
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/backups" element={<Backups />} />
+                    <Route path="/schedules" element={<Schedules />} />
+                    <Route path="/restore" element={<Restore />} />
+                    <Route path="/clusters" element={<Clusters />} />
+                    <Route path="/architecture" element={<Architecture />} />
+                    <Route path="/monitoring" element={<Monitoring />} />
+                    <Route path="/disaster-recovery" element={<DisasterRecovery />} />
+                    <Route path="/upload-demo" element={<UploadDemo />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AppLayout>
+              </ProtectedRoute>
             }
           />
         </Routes>
