@@ -42,8 +42,8 @@ const Clusters = () => {
       setFormData({ name: "", provider: "", region: "", nodesCount: "3", version: "1.28.0" });
       toast.success("Cluster added successfully.");
     },
-    onError: () => {
-      toast.error("Failed to add cluster.");
+    onError: (error: any) => {
+      toast.error(`Failed to add cluster: ${error.message}`);
     }
   });
 
