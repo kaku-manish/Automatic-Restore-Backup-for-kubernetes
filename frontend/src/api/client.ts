@@ -1,7 +1,13 @@
 // Uses VITE_API_URL from environment variables.
 // - For local dev: set in .env.local (http://localhost:3001/api)
 // - For production: set VITE_API_URL in Vercel dashboard → Environment Variables
-export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+let base = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
+// Normalize the URL to ensure it always ends with /api (fixes "Cannot POST /clusters" 404s)
+if (!base.endsWith('/api') && !base.includes('/api/')) {
+    base = base.endsWith('/') ? `${base}api` : `${base}/api`;
+}
+export const API_BASE = base;
 
 const handleResponse = async (res: Response) => {
     if (!res.ok) {
