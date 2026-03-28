@@ -279,6 +279,26 @@ app.post('/api/files/upload', upload.single('file'), (req, res) => {
     res.status(201).json({ message: 'File uploaded and backup triggered.', data: fileInfo, backup: autoBackup });
 });
 
+// GET /api/files/stream — Server-Sent Events for file directory changes
+app.get('/api/files/stream', (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    res.write('data: connected\n\n');
+
+    const watcher = fs.watch(UPLOAD_DIR, (eventType, filename) => {
+        if (filename) {
+            res.write(`data: ${JSON.stringify({ eventType, filename })}\n\n`);
+        }
+    });
+
+    req.on('close', () => {
+        watcher.close();
+    });
+});
+
 // GET /api/files — list all versioned files on disk
 app.get('/api/files', (req, res) => {
     fs.readdir(UPLOAD_DIR, (err, files) => {

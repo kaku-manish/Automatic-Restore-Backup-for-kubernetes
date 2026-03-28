@@ -31,6 +31,21 @@ const UploadDemo = () => {
 
     useEffect(() => {
         fetchFiles();
+
+        // Enable real-time tracking of file changes via Server-Sent Events
+        const eventSource = new EventSource(`${UPLOADER_API_URL}/stream`);
+        eventSource.onmessage = (event) => {
+            if (event.data !== 'connected') {
+                // Introduce a slight delay to allow the filesystem to finish the I/O event
+                setTimeout(() => {
+                     fetchFiles();
+                }, 100);
+            }
+        };
+
+        return () => {
+            eventSource.close();
+        };
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
